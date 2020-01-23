@@ -36,7 +36,7 @@ public class Heat {
     public String toString() {
         StringBuilder sb = new StringBuilder("Heat ");
         sb.append((heatId + 1));//indexed at zero
-        sb.append(" | ");
+        sb.append(" :  ");
 
         Racer lastRacerByIndex = racers.get(racers.size() - 1);
         for (Racer racer : racers) {

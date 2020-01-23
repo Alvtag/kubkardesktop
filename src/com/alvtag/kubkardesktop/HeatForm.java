@@ -267,6 +267,9 @@ public class HeatForm {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (raceResult == null) {
+                    return;
+                }
                 heat.setRaceTimesMS(raceResult.getRaceTimesMs());
                 homeFormInterface.notifyHeatsChanged();
                 homeFormInterface.showRacerOverViewForm();
@@ -299,7 +302,7 @@ public class HeatForm {
             public void actionPerformed(ActionEvent e) {
                 heatState = Heat.STATE_IDLE;
                 raceResult = null;
-                for (int i = 0; i < heat.getRacers().size(); i++) {
+                for (int i = 0; i < 6; i++) {
                     laneScaledSpeedLabelList[i].setText("");
                     laneHeatTimeJLabelList[i].setText("");
                 }
@@ -332,11 +335,22 @@ public class HeatForm {
     public void startHeat(Heat heat) {
         heatTitleLabel.setText("Heat " + (heat.getHeatId() + 1));
         this.heat = heat;
-        for (int i = 0; i < heat.getRacers().size(); i++) {
-            laneRacerIdJLabelList[i].setText(String.valueOf(heat.getRacers().get(i).getRacerId()));
+        for (int i = 0; i < 6; i++) {
             laneScaledSpeedLabelList[i].setText("");
             laneHeatTimeJLabelList[i].setText("");
         }
+
+        HashMap<Integer, Boolean> trackActivesHashMap = homeFormInterface.getActiveTracks();
+        for (int trackIndex = 0, racerIndex = 0; trackIndex < 6; trackIndex++) {
+            boolean isTrackActive = trackActivesHashMap.get(trackIndex);
+            if (isTrackActive) {
+                laneRacerIdJLabelList[trackIndex].setText(String.valueOf(heat.getRacers().get(racerIndex).getRacerId()));
+                racerIndex++;
+            } else {
+                laneRacerIdJLabelList[trackIndex].setText("");
+            }
+        }
+
         if (heat.getRaceTimesMS() != null) {
             setRaceResult(heat.getRaceTimesMS());
         }
