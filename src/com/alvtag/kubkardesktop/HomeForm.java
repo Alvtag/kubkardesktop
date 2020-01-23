@@ -44,8 +44,8 @@ public class HomeForm implements HomeFormInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //JOptionPane.showMessageDialog(((JButton)e.getSource()).getRootPane(), "Hello there.");
-                if (racersList == null || racersList.size() < 3) {
-                    JOptionPane.showMessageDialog(((JButton) e.getSource()).getRootPane(), "At least 3 racers needed!");
+                if (racersList == null || racersList.size() < 2) {
+                    JOptionPane.showMessageDialog(((JButton) e.getSource()).getRootPane(), "At least 2 racers needed!");
                     return;
                 }
 
@@ -57,13 +57,14 @@ public class HomeForm implements HomeFormInterface {
                 if (lane4CheckBox.isSelected()) trackCount++;
                 if (lane5CheckBox.isSelected()) trackCount++;
 
-                switch (trackCount) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 5:
-                        JOptionPane.showMessageDialog(((JButton) e.getSource()).getRootPane(), "We only support 3, 4, or 6 tracks!");
-                        return;
+                if (trackCount == 0 || trackCount == 1) {
+                    JOptionPane.showMessageDialog(((JButton) e.getSource()).getRootPane(),
+                            "Select at least two tracks!");
+                    return;
+                } else if (trackCount > racersList.size()) {
+                    JOptionPane.showMessageDialog(((JButton) e.getSource()).getRootPane(),
+                            "You've selected more tracks than we have racers! Please de-select some tracks.");
+                    return;
                 }
 
                 raceOverViewForm.setRaceParams(
