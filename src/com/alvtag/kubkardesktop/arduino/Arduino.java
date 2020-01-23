@@ -127,6 +127,7 @@ public class Arduino {
         try {
             Thread.sleep(5);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         PrintWriter pout = new PrintWriter(comPort.getOutputStream());
         pout.print(s);
