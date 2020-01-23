@@ -72,82 +72,9 @@ public class RaceOverViewForm {
     }
 
     private static Heat[] getHeatsArray(int trackCount, List<Racer> racerList) {
-        int[][] rawHeatData = null;
-        switch (trackCount) {
-            case 3:
-                rawHeatData = PPN.LANE_3_CAR_3;
-                break;
-            case 4:
-                rawHeatData = PPN.LANE_4_CAR_4;
-                break;
-            case 6:
-                switch (racerList.size()) {
-                    case 6:
-                        rawHeatData = PPN.LANE_6_CAR_6;
-                        break;
-                    case 7:
-                        rawHeatData = PPN.LANE_6_CAR_7;
-                        break;
-                    case 8:
-                        rawHeatData = PPN.LANE_6_CAR_8;
-                        break;
-                    case 9:
-                        rawHeatData = PPN.LANE_6_CAR_9;
-                        break;
-                    case 10:
-                        rawHeatData = PPN.LANE_6_CAR_10;
-                        break;
-                    case 11:
-                        rawHeatData = PPN.LANE_6_CAR_11;
-                        break;
-                    case 12:
-                        rawHeatData = PPN.LANE_6_CAR_12;
-                        break;
-                    case 13:
-                        rawHeatData = PPN.LANE_6_CAR_13;
-                        break;
-                    case 14:
-                        rawHeatData = PPN.LANE_6_CAR_14;
-                        break;
-                    case 15:
-                        rawHeatData = PPN.LANE_6_CAR_15;
-                        break;
-                    case 16:
-                        rawHeatData = PPN.LANE_6_CAR_16;
-                        break;
-                    case 17:
-                        rawHeatData = PPN.LANE_6_CAR_17;
-                        break;
-                    case 18:
-                        rawHeatData = PPN.LANE_6_CAR_18;
-                        break;
-                    case 19:
-                        rawHeatData = PPN.LANE_6_CAR_19;
-                        break;
-                    case 20:
-                        rawHeatData = PPN.LANE_6_CAR_20;
-                        break;
-                    case 21:
-                        rawHeatData = PPN.LANE_6_CAR_21;
-                        break;
-                    case 22:
-                        rawHeatData = PPN.LANE_6_CAR_22;
-                        break;
-                    case 23:
-                        rawHeatData = PPN.LANE_6_CAR_23;
-                        break;
-                    case 24:
-                        rawHeatData = PPN.LANE_6_CAR_24;
-                        break;
-                    case 25:
-                        rawHeatData = PPN.LANE_6_CAR_25;
-                        break;
-                }
-                break;
-        }
-        if (rawHeatData == null) {
-            throw new IllegalStateException("no heats data found for " + trackCount + " lanes and " + racerList.size() + " cars");
-        }
+        int[][] rawHeatData = PPN.getHeatsArray(trackCount, racerList);
+
+        // Convert rawHeatData into an array of Heats
         Heat[] heats = new Heat[rawHeatData.length];
         for (int i = 0; i < rawHeatData.length; i++) {
             //for each heat
