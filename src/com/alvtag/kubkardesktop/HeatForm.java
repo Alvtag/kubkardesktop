@@ -242,8 +242,9 @@ public class HeatForm {
             }
             System.out.println("Arduino connect success:" + success);
             if (!success) {
-                JOptionPane.showMessageDialog(rootPanel, "Arduino connection failed on " + WINDOWS_ARDUINO_PORT +
-                        ". Is a Serial Monitor locking the port?. Please Restart the application.");
+                JOptionPane.showMessageDialog(rootPanel, "Arduino connection failed on " + ARDUINO_PORT + ". " +
+                        "Check:1) Serial Monitor locking port. 2)Arduino Connected. 3) PC platform. " +
+                        "Please Restart the application.");
             } else {
                 // kick off two tasks; one to read the buffer for data arrived from arduino;
                 // one to request status updates from arduino
