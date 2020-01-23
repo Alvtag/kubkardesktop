@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeForm implements HomeFormInterface {
@@ -123,6 +124,18 @@ public class HomeForm implements HomeFormInterface {
     @Override
     public void notifyHeatsChanged() {
         raceOverViewForm.notifyHeatsChanged();
+    }
+
+    @Override
+    public HashMap<Integer, Boolean> getActiveTracks() {
+        HashMap<Integer, Boolean> result = new HashMap<>();
+        result.put(0, lane0CheckBox.isSelected());
+        result.put(1, lane1CheckBox.isSelected());
+        result.put(2, lane2CheckBox.isSelected());
+        result.put(3, lane3CheckBox.isSelected());
+        result.put(4, lane4CheckBox.isSelected());
+        result.put(5, lane5CheckBox.isSelected());
+        return result;
     }
 
     private void setRacersList() {

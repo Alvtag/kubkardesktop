@@ -13,10 +13,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class HeatForm {
 
@@ -125,8 +124,8 @@ public class HeatForm {
                 TrackStatusDTO status = gson.fromJson(jsonString, TrackStatusDTO.class);
                 setTrackStatus(status);
                 //System.out.println("Status Read:" + status);
-            } else if (jsonString.contains("RACE_END")) {
-                jsonString = jsonString.replace("RACE_END", "");
+            } else if (jsonString.contains("END_RACE")) {
+                jsonString = jsonString.replace("END_RACE", "");
                 Gson gson = new Gson();
                 RaceResultDTO resultDTO = gson.fromJson(jsonString, RaceResultDTO.class);
 
@@ -283,7 +282,15 @@ public class HeatForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (heatState == Heat.STATE_IDLE) {
-                    arduino.serialWrite("$$BEGIN_RACE%%");
+                    StringBuilder sb = new StringBuilder("$$BEGIN_RACE|");
+                    HashMap<Integer, Boolean> hashMap = homeFormInterface.getActiveTracks();
+                    for (int i = 0; i < 6; i++) {
+                        if (hashMap.get(i)) {
+                            sb.append(i);
+                        }
+                    }
+                    sb.append("%%");
+                    arduino.serialWrite(sb.toString());
                 }
             }
         });
@@ -330,7 +337,7 @@ public class HeatForm {
             laneScaledSpeedLabelList[i].setText("");
             laneHeatTimeJLabelList[i].setText("");
         }
-        if(heat.getRaceTimesMS()!= null){
+        if (heat.getRaceTimesMS() != null) {
             setRaceResult(heat.getRaceTimesMS());
         }
     }

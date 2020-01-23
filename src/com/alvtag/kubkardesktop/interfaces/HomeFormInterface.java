@@ -2,6 +2,8 @@ package com.alvtag.kubkardesktop.interfaces;
 
 import com.alvtag.kubkardesktop.models.Heat;
 
+import java.util.HashMap;
+
 public interface HomeFormInterface {
     void showHomeForm();
 
@@ -12,4 +14,6 @@ public interface HomeFormInterface {
     void showRacerOverViewForm();
 
     void notifyHeatsChanged();
+
+    HashMap<Integer, Boolean> getActiveTracks();
 }
