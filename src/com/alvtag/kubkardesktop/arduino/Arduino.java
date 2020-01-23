@@ -42,8 +42,8 @@ public class Arduino {
             }
             return true;
         } else {
-            AlertBox alert = new AlertBox(new Dimension(400, 100), "Error Connecting", "Try Another port");
-            alert.display();
+//            AlertBox alert = new AlertBox(new Dimension(400, 100), "Error Connecting", "Try Another port");
+//            alert.display();
             return false;
         }
     }
@@ -72,6 +72,9 @@ public class Arduino {
 
 
     public String serialRead() {
+        if (comPort == null) {
+            return null;
+        }
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
         InputStream is = comPort.getInputStream();
         String out = "";
@@ -116,6 +119,9 @@ public class Arduino {
     }
 
     public void serialWrite(String s) {
+        if (comPort == null) {
+            return;
+        }
         //writes the entire string at once.
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
         try {
