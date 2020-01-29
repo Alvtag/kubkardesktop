@@ -6,6 +6,8 @@ import com.alvtag.kubkardesktop.models.Heat;
 import com.alvtag.kubkardesktop.models.Racer;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -27,13 +29,7 @@ public class RaceOverViewForm {
     }
 
     public RaceOverViewForm(HomeFormInterface homeFormInterface) {
-        setButtonListeners(homeFormInterface);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        setWidgetListeners(homeFormInterface);
     }
 
     public JPanel getRootPanel() {
@@ -49,7 +45,7 @@ public class RaceOverViewForm {
         heatsJList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
     }
 
-    private void setButtonListeners(HomeFormInterface homeFormInterface) {
+    private void setWidgetListeners(HomeFormInterface homeFormInterface) {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +63,18 @@ public class RaceOverViewForm {
 
                 homeFormInterface.startHeat(heatsArray[selection]);
                 homeFormInterface.showHeatForm();
+            }
+        });
+        printCopiesSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                //todo alvtag set min to one
+            }
+        });
+        printButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO print X copies as JSpinner printCopiesSpinner determines
             }
         });
     }
