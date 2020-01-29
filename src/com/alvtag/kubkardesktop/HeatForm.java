@@ -173,7 +173,7 @@ public class HeatForm {
                 laneHeatTimeJLabelList[i].setText(String.format("%d.%d s", (time / 1000), (time % 1000)));
                 double timeInSeconds = ((double) time) / 1000D;
                 double scaledSpeed = TRACK_40_SCALE_25_FACTOR / timeInSeconds;
-                System.out.println("Racer " + i + " | time:" + time + " s | Scaled speed:" + scaledSpeed + " km/h");
+                System.out.println("Racer " + i + " | time:" + time + " ms | Scaled speed:" + scaledSpeed + " km/h");
                 laneScaledSpeedLabelList[i].setText(String.format("%.2f km/h", scaledSpeed));
             }
         }
@@ -307,6 +307,9 @@ public class HeatForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 raceResult = null;
+                heat.setRaceTimesMS(null);
+                homeFormInterface.notifyHeatsChanged();
+
                 for (int i = 0; i < 6; i++) {
                     laneScaledSpeedLabelList[i].setText("");
                     laneHeatTimeJLabelList[i].setText("");
@@ -374,6 +377,8 @@ public class HeatForm {
 
         if (heat.getRaceTimesMS() != null) {
             setRaceResult(heat.getRaceTimesMS());
+        } else {
+            raceResult = null;
         }
         setHeatStateIdle();
     }
