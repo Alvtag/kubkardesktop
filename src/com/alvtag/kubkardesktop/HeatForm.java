@@ -8,13 +8,13 @@ import com.alvtag.kubkardesktop.models.RaceResultDTO;
 import com.alvtag.kubkardesktop.models.TrackStatusDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.List;
 import java.util.Timer;
 
 public class HeatForm {
@@ -120,43 +120,49 @@ public class HeatForm {
             System.out.println("processRxDataBuffer command from Arduino:" + jsonString);
             if (jsonString.contains("STATUS")) {
                 jsonString = jsonString.replace("STATUS", "");
-                Gson gson = new GsonBuilder().setLenient().create();
-                TrackStatusDTO status = gson.fromJson(jsonString, TrackStatusDTO.class);
-                setTrackStatus(status);
+                if (isValidJson(jsonString)) {
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    TrackStatusDTO status = gson.fromJson(jsonString, TrackStatusDTO.class);
+                    setTrackStatus(status);
+                } else {
+                    // invalid json detected; drop whatever else is in data buffer and wait for next status update.
+                    arduinoRxDataBuffer = "";
+                }
                 //System.out.println("Status Read:" + status);
             } else if (jsonString.contains("END_RACE")) {
                 jsonString = jsonString.replace("END_RACE", "");
-                Gson gson = new Gson();
-                RaceResultDTO resultDTO = gson.fromJson(jsonString, RaceResultDTO.class);
 
-                int[] racers = new int[heat.getRacers().size()];
-                for (int i = 0; i < racers.length; i++) {
-                    racers[i] = heat.getRacers().get(i).getRacerId();
-                }
+                if (isValidJson(jsonString)) {
+                    Gson gson = new Gson();
+                    RaceResultDTO resultDTO = gson.fromJson(jsonString, RaceResultDTO.class);
 
-                int[] trackTimes = resultDTO.toArray(); // array size always 6
-                int[] raceTimes = new int[racers.length];
-
-                //e.g. racers 1,2,3,4 on tracks X, 1, X, 2, 3, 4
-                int racerCounter = 0;
-                int trackCounter = 0;
-                while (trackCounter < trackTimes.length) {
-                    if (trackTimes[trackCounter] < 0) {
-                        trackCounter++;
-                        continue;
+                    int[] racerIds = new int[heat.getRacers().size()];
+                    for (int i = 0; i < racerIds.length; i++) {
+                        racerIds[i] = heat.getRacers().get(i).getRacerId();
                     }
-                    raceTimes[racerCounter] = trackTimes[trackCounter];
-                    racerCounter++;
-                    trackCounter++;
+
+                    int[] trackTimes = resultDTO.toArray(); // array size always 6
+                    this.raceResult = new RaceResult(racerIds, trackTimes, heat.getHeatId());;
+                    setRaceResult(trackTimes);
+                    setHeatStateIdle();
+                } else {
+                    System.out.println("~Re-requesting end-race data~");
+                    // Invalid json detected; drop buffer and re-request data.
+                    arduinoRxDataBuffer = "";
+                    arduino.serialWrite("$$RESEND_END_RACE%%");
                 }
-
-                RaceResult raceResult = new RaceResult(racers);
-                raceResult.setRacerResults(raceTimes);
-
-                this.raceResult = raceResult;
-                setRaceResult(raceTimes);
-                heatState = Heat.STATE_IDLE;
             }
+        }
+    }
+
+    private boolean isValidJson(String jsonString) {
+        try {
+            JsonParser parser = new JsonParser();
+            parser.parse(jsonString);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
