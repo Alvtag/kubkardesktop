@@ -87,7 +87,7 @@ public class HeatForm {
     private String arduinoRxDataBuffer = "";
     private int heatState;
     private Heat heat;
-    private RaceResult raceResult;
+    private RaceResult raceResult = null;
 
     long runnableCounter = -1;
 
@@ -187,8 +187,7 @@ public class HeatForm {
         laneEndGateStatePanelList[3].setBackground(status.gate3 == 0 ? COLOR_BLACK : COLOR_GREEN);
         laneEndGateStatePanelList[4].setBackground(status.gate4 == 0 ? COLOR_BLACK : COLOR_GREEN);
         laneEndGateStatePanelList[5].setBackground(status.gate5 == 0 ? COLOR_BLACK : COLOR_GREEN);
-        heatState = status.raceState;
-        switch (heatState) {
+        switch (status.raceState) {
             case Heat.STATE_IDLE:
                 setHeatStateIdle();
                 break;
@@ -232,6 +231,7 @@ public class HeatForm {
                 lane5ScaledSpeed
         };
 
+        setHeatStateIdle();
         setButtonListeners(homeFormInterface);
         initiateArduino();
     }
@@ -306,32 +306,47 @@ public class HeatForm {
         resetRaceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                heatState = Heat.STATE_IDLE;
                 raceResult = null;
                 for (int i = 0; i < 6; i++) {
                     laneScaledSpeedLabelList[i].setText("");
                     laneHeatTimeJLabelList[i].setText("");
                 }
+                setHeatStateIdle();
+                //todo alvtag send signal to arduino to reset its state to idle.
             }
         });
     }
 
     private void setHeatStateIdle() {
+        heatState = Heat.STATE_IDLE;
         stateIdlePanel.setBackground(COLOR_GREEN);
         stateReadyPanel.setBackground(COLOR_PURPLE);
         stateRacingPanel.setBackground(COLOR_PURPLE);
-    }
 
+        startRaceButton.setEnabled(raceResult == null);
+        resetRaceButton.setEnabled(raceResult != null);
+        submitButton.setEnabled(raceResult != null);
+    }
     private void setHeatStateReady() {
+        heatState = Heat.STATE_READY;
         stateIdlePanel.setBackground(COLOR_PURPLE);
         stateReadyPanel.setBackground(COLOR_GREEN);
         stateRacingPanel.setBackground(COLOR_PURPLE);
+
+        startRaceButton.setEnabled(false);
+        resetRaceButton.setEnabled(true);
+        submitButton.setEnabled(false);
     }
 
     private void setHeatStateRacing() {
+        heatState = Heat.STATE_RACING;
         stateIdlePanel.setBackground(COLOR_PURPLE);
         stateReadyPanel.setBackground(COLOR_PURPLE);
         stateRacingPanel.setBackground(COLOR_GREEN);
+
+        startRaceButton.setEnabled(false);
+        resetRaceButton.setEnabled(true);
+        submitButton.setEnabled(false);
     }
 
     public JPanel getRootPanel() {
@@ -360,5 +375,6 @@ public class HeatForm {
         if (heat.getRaceTimesMS() != null) {
             setRaceResult(heat.getRaceTimesMS());
         }
+        setHeatStateIdle();
     }
 }
