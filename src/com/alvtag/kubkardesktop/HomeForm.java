@@ -37,6 +37,12 @@ public class HomeForm implements HomeFormInterface {
     private JButton loadRacerCsvButton;
     private JList<String> racersJList;
     private JLabel racersCountLabel;
+    private JPanel lane0ColorPanel;
+    private JPanel lane1ColorPanel;
+    private JPanel lane2ColorPanel;
+    private JPanel lane3ColorPanel;
+    private JPanel lane4ColorPanel;
+    private JPanel lane5ColorPanel;
     private List<Racer> racersList;
 
     public HomeForm() {
@@ -93,6 +99,12 @@ public class HomeForm implements HomeFormInterface {
                 }
             }
         });
+        lane0ColorPanel.setBackground(HeatForm.COLOR_LANE_0);
+        lane1ColorPanel.setBackground(HeatForm.COLOR_LANE_1);
+        lane2ColorPanel.setBackground(HeatForm.COLOR_LANE_2);
+        lane3ColorPanel.setBackground(HeatForm.COLOR_LANE_3);
+        lane4ColorPanel.setBackground(HeatForm.COLOR_LANE_4);
+        lane5ColorPanel.setBackground(HeatForm.COLOR_LANE_5);
     }
 
     @Override

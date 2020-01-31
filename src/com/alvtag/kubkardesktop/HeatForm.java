@@ -21,9 +21,22 @@ public class HeatForm {
 
     private static final int BAUD_RATE = 9600;
     private static final Color COLOR_GREEN = new Color(0, 162, 7);
+    private static final Color COLOR_PURPLE = new Color(137, 0, 170);
+
+    // Legacy track colors, in sorted order. (Red on starboard Side, blue on port side of track.)
     private static final Color COLOR_RED = new Color(162, 0, 8);
     private static final Color COLOR_BLACK = new Color(16, 16, 16);
-    private static final Color COLOR_PURPLE = new Color(137, 0, 170);
+    private static final Color COLOR_DARK_GREEN = new Color(0, 81, 3);
+    private static final Color COLOR_BROWN = new Color(150,75,0);
+    private static final Color COLOR_YELLOW = new Color(255,255,0);
+    private static final Color COLOR_BLUE = new Color(0, 71, 171);
+
+    public static final Color COLOR_LANE_0 = COLOR_RED;
+    public static final Color COLOR_LANE_1 = COLOR_BLACK;
+    public static final Color COLOR_LANE_2 = COLOR_DARK_GREEN;
+    public static final Color COLOR_LANE_3 = COLOR_BROWN;
+    public static final Color COLOR_LANE_4 = COLOR_YELLOW;
+    public static final Color COLOR_LANE_5 = COLOR_BLUE;
 
     // FACTOR/TIME = SCALED-SPEED
     // FACTOR's unit is Km-Seconds per Hour
@@ -75,6 +88,12 @@ public class HeatForm {
     private JPanel stateReadyPanel;
     private JPanel stateRacingPanel;
     private JPanel rootPanel;
+    private JPanel lane0ColorPanel;
+    private JPanel lane1ColorPanel;
+    private JPanel lane2ColorPanel;
+    private JPanel lane3ColorPanel;
+    private JPanel lane4ColorPanel;
+    private JPanel lane5ColorPanel;
 
     private JLabel[] laneRacerIdJLabelList;
     private JPanel[] laneEndGateStatePanelList;
@@ -230,6 +249,12 @@ public class HeatForm {
                 lane4ScaledSpeed,
                 lane5ScaledSpeed
         };
+        lane0ColorPanel.setBackground(COLOR_LANE_0);
+        lane1ColorPanel.setBackground(COLOR_LANE_1);
+        lane2ColorPanel.setBackground(COLOR_LANE_2);
+        lane3ColorPanel.setBackground(COLOR_LANE_3);
+        lane4ColorPanel.setBackground(COLOR_LANE_4);
+        lane5ColorPanel.setBackground(COLOR_LANE_5);
 
         setHeatStateIdle();
         setButtonListeners(homeFormInterface);
