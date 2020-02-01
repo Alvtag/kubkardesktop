@@ -38,16 +38,15 @@ public class Heat {
         sb.append((heatId + 1));//indexed at zero
         sb.append(" :  ");
 
-        Racer lastRacerByIndex = racers.get(racers.size() - 1);
         for (Racer racer : racers) {
             sb.append(racer.getRacerId());
             sb.append(" | ");
         }
-        if (raceTimesMS == null) {
-            sb.append("NOT RUN");
-        } else {
-            sb.append("COMPLETED");
-        }
+        sb.append(isCompleted() ? "COMPLETED" : "NOT RUN");
         return sb.toString();
+    }
+
+    public boolean isCompleted() {
+        return raceTimesMS != null;
     }
 }

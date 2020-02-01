@@ -72,19 +72,23 @@ public class HomeForm implements HomeFormInterface {
                             "You've selected more tracks than we have racers! Please de-select some tracks.");
                     return;
                 }
-
-                raceOverViewForm.setRaceParams(
-                        lane0CheckBox.isSelected(),
-                        lane1CheckBox.isSelected(),
-                        lane2CheckBox.isSelected(),
-                        lane3CheckBox.isSelected(),
-                        lane4CheckBox.isSelected(),
-                        lane5CheckBox.isSelected(),
-                        trackCount,
-                        racersList
-                );
-
-                showRacerOverViewForm();
+                try {
+                    raceOverViewForm.setRaceParams(
+                            lane0CheckBox.isSelected(),
+                            lane1CheckBox.isSelected(),
+                            lane2CheckBox.isSelected(),
+                            lane3CheckBox.isSelected(),
+                            lane4CheckBox.isSelected(),
+                            lane5CheckBox.isSelected(),
+                            trackCount,
+                            racersList
+                    );
+                    showRacerOverViewForm();
+                } catch (IllegalStateException e1) {
+                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(rootPanel, e1.getMessage());
+                    return;
+                }
             }
         });
         loadRacerCsvButton.addActionListener(new ActionListener() {

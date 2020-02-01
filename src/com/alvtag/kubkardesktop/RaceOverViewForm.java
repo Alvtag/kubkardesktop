@@ -11,16 +11,21 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class RaceOverViewForm {
 
     private JPanel rootPanel;
     private JList<Heat> heatsJList;
     private JButton backButton;
-    private JButton printButton;
-    private JSpinner printCopiesSpinner;
+    private JButton printHeatsButton;
+    private JSpinner printHeatCopiesSpinner;
+    private JSpinner printAverageTimesCopiesSpinner;
     private JButton startHeatButton;
+    private JList<Racer> averageTimesJList;
+    private JButton printAverageTimesButton;
     private List<Racer> racerList;
     private Heat[] heatsArray;
 
@@ -65,13 +70,19 @@ public class RaceOverViewForm {
                 homeFormInterface.showHeatForm();
             }
         });
-        printCopiesSpinner.addChangeListener(new ChangeListener() {
+        printHeatCopiesSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 //todo alvtag set min to one
             }
         });
-        printButton.addActionListener(new ActionListener() {
+        printAverageTimesCopiesSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                //todo alvtag set min to one
+            }
+        });
+        printHeatsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO print X copies as JSpinner printCopiesSpinner determines
@@ -107,9 +118,43 @@ public class RaceOverViewForm {
         throw new IllegalStateException("no racer data found for " + racerId + "!!!");
     }
 
-
     public void notifyHeatsChanged() {
         heatsJList.setListData(heatsArray);
         heatsJList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+        setAverageTimes();
+    }
+
+    private void setAverageTimes() {
+        for (Racer racer : racerList) {
+            racer.clearRaceResults();
+        }
+
+        for (Heat heat : heatsArray) {
+            if (!heat.isCompleted()) {
+                continue;
+            }
+            List<Racer> racers = heat.getRacers();
+            int racerIndex = 0;
+            for (int singleTrackRaceTime : heat.getRaceTimesMS()) {
+                if (singleTrackRaceTime < 1) {
+                    continue;
+                }
+                if (racerIndex >= racers.size()) {
+                    return;
+                }
+                racers.get(racerIndex).addRaceTime(singleTrackRaceTime);
+                racerIndex++;
+            }
+        }
+        List<Racer> racersToSort = new ArrayList<>();
+        racersToSort.addAll(racerList);
+        Collections.sort(racersToSort);
+        Racer[] sortedRacers = new Racer[racersToSort.size()];
+        for (int i = 0; i < racersToSort.size(); i++) {
+            sortedRacers[i] = racersToSort.get(i);
+        }
+
+        averageTimesJList.setListData(sortedRacers);
+        averageTimesJList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
     }
 }
