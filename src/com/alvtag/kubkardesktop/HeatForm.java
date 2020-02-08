@@ -27,8 +27,8 @@ public class HeatForm {
     private static final Color COLOR_RED = new Color(162, 0, 8);
     private static final Color COLOR_BLACK = new Color(16, 16, 16);
     private static final Color COLOR_DARK_GREEN = new Color(0, 81, 3);
-    private static final Color COLOR_BROWN = new Color(150,75,0);
-    private static final Color COLOR_YELLOW = new Color(255,255,0);
+    private static final Color COLOR_BROWN = new Color(150, 75, 0);
+    private static final Color COLOR_YELLOW = new Color(255, 255, 0);
     private static final Color COLOR_BLUE = new Color(0, 71, 171);
 
     public static final Color COLOR_LANE_0 = COLOR_RED;
@@ -50,7 +50,7 @@ public class HeatForm {
     private static final int HERTZ_10_DELAY = 100;
     private static final String WINDOWS_ARDUINO_PORT = "COM3";
     private static final String MAC_ARDUINO_PORT = "/dev/cu.usbmodem1411";
-    private static final String ARDUINO_PORT = MAC_ARDUINO_PORT;
+    private static final String ARDUINO_PORT = WINDOWS_ARDUINO_PORT;
 
     private JLabel heatTitleLabel;
 
@@ -94,8 +94,15 @@ public class HeatForm {
     private JPanel lane3ColorPanel;
     private JPanel lane4ColorPanel;
     private JPanel lane5ColorPanel;
+    private JLabel lane0RacerNameJLabel;
+    private JLabel lane1RacerNameJLabel;
+    private JLabel lane2RacerNameJLabel;
+    private JLabel lane0Race3NameJLabel;
+    private JLabel lane4RacerNameJLabel;
+    private JLabel lane5RacerNameJLabel;
 
     private JLabel[] laneRacerIdJLabelList;
+    private JLabel[] laneRacerNameJLabelList;
     private JPanel[] laneEndGateStatePanelList;
     private JLabel[] laneHeatTimeJLabelList;
     private JLabel[] laneScaledSpeedLabelList;
@@ -161,7 +168,8 @@ public class HeatForm {
                     }
 
                     int[] trackTimes = resultDTO.toArray(); // array size always 6
-                    this.raceResult = new RaceResult(racerIds, trackTimes, heat.getHeatId());;
+                    this.raceResult = new RaceResult(racerIds, trackTimes, heat.getHeatId());
+                    ;
                     setRaceResult(trackTimes);
                     setHeatStateIdle();
                 } else {
@@ -223,32 +231,40 @@ public class HeatForm {
         this.homeFormInterface = homeFormInterface;
 
         laneRacerIdJLabelList = new JLabel[]{
-                lane0RacerIdJLabel, lane1RacerIdJLabel, lane2RacerIdJLabel,
-                lane3RacerIdJLabel, lane4RacerIdJLabel, lane5RacerIdJLabel};
+                lane0RacerIdJLabel,
+                lane1RacerIdJLabel,
+                lane2RacerIdJLabel,
+                lane3RacerIdJLabel,
+                lane4RacerIdJLabel,
+                lane5RacerIdJLabel};
+        laneRacerNameJLabelList = new JLabel[]{
+                lane0RacerNameJLabel,
+                lane1RacerNameJLabel,
+                lane2RacerNameJLabel,
+                lane0Race3NameJLabel,
+                lane4RacerNameJLabel,
+                lane5RacerNameJLabel};
         laneEndGateStatePanelList = new JPanel[]{
                 lane0EndGateState,
                 lane1EndGateState,
                 lane2EndGateState,
                 lane3EndGateState,
                 lane4EndGateState,
-                lane5EndGateState
-        };
+                lane5EndGateState};
         laneHeatTimeJLabelList = new JLabel[]{
                 lane0HeatTime,
                 lane1HeatTime,
                 lane2HeatTime,
                 lane3HeatTime,
                 lane4HeatTime,
-                lane5HeatTime
-        };
+                lane5HeatTime};
         laneScaledSpeedLabelList = new JLabel[]{
                 lane0ScaledSpeed,
                 lane1ScaledSpeed,
                 lane2ScaledSpeed,
                 lane3ScaledSpeed,
                 lane4ScaledSpeed,
-                lane5ScaledSpeed
-        };
+                lane5ScaledSpeed};
         lane0ColorPanel.setBackground(COLOR_LANE_0);
         lane1ColorPanel.setBackground(COLOR_LANE_1);
         lane2ColorPanel.setBackground(COLOR_LANE_2);
@@ -355,6 +371,7 @@ public class HeatForm {
         resetRaceButton.setEnabled(raceResult != null);
         submitButton.setEnabled(raceResult != null);
     }
+
     private void setHeatStateReady() {
         heatState = Heat.STATE_READY;
         stateIdlePanel.setBackground(COLOR_PURPLE);
@@ -394,9 +411,11 @@ public class HeatForm {
             boolean isTrackActive = trackActivesHashMap.get(trackIndex);
             if (isTrackActive) {
                 laneRacerIdJLabelList[trackIndex].setText(String.valueOf(heat.getRacers().get(racerIndex).getRacerId()));
+                laneRacerNameJLabelList[trackIndex].setText(heat.getRacers().get(racerIndex).getName());
                 racerIndex++;
             } else {
                 laneRacerIdJLabelList[trackIndex].setText("");
+                laneRacerNameJLabelList[trackIndex].setText("");
             }
         }
 
