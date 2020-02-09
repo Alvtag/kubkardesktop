@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 import java.util.Timer;
 
 public class HeatForm {
@@ -37,6 +38,24 @@ public class HeatForm {
     public static final Color COLOR_LANE_3 = COLOR_BROWN;
     public static final Color COLOR_LANE_4 = COLOR_YELLOW;
     public static final Color COLOR_LANE_5 = COLOR_BLUE;
+
+    public static final String COLOR_LANE_0_STRING = "RED";
+    public static final String COLOR_LANE_1_STRING = "BLK";
+    public static final String COLOR_LANE_2_STRING = "GRN";
+    public static final String COLOR_LANE_3_STRING = "BRN";
+    public static final String COLOR_LANE_4_STRING = "YEL";
+    public static final String COLOR_LANE_5_STRING = "BLU";
+    public static final List<String> COLOR_STRINGS;
+
+    static {
+        COLOR_STRINGS = new ArrayList<>();
+        COLOR_STRINGS.add(COLOR_LANE_0_STRING);
+        COLOR_STRINGS.add(COLOR_LANE_1_STRING);
+        COLOR_STRINGS.add(COLOR_LANE_2_STRING);
+        COLOR_STRINGS.add(COLOR_LANE_3_STRING);
+        COLOR_STRINGS.add(COLOR_LANE_4_STRING);
+        COLOR_STRINGS.add(COLOR_LANE_5_STRING);
+    }
 
     // FACTOR/TIME = SCALED-SPEED
     // FACTOR's unit is Km-Seconds per Hour
