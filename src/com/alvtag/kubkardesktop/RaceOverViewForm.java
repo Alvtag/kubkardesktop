@@ -70,7 +70,13 @@ public class RaceOverViewForm {
         printHeatsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Printer(heatsArray, racerList, homeFormInterface.getActiveTracks()).startJob();
+                new Printer(heatsArray, racerList, homeFormInterface.getActiveTracks(), false).startJob();
+            }
+        });
+        printAverageTimesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Printer(heatsArray, racerList, homeFormInterface.getActiveTracks(), true).startJob();
             }
         });
     }
@@ -114,6 +120,14 @@ public class RaceOverViewForm {
             racer.clearRaceResults();
         }
 
+        Racer[] sortedRacers = getAverageTimeSortedRacersArray(heatsArray, racerList);
+        if (sortedRacers == null) return;
+
+        averageTimesJList.setListData(sortedRacers);
+        averageTimesJList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+    }
+
+    public static Racer[] getAverageTimeSortedRacersArray(Heat[] heatsArray, List<Racer> racerList) {
         for (Heat heat : heatsArray) {
             if (!heat.isCompleted()) {
                 continue;
@@ -125,7 +139,7 @@ public class RaceOverViewForm {
                     continue;
                 }
                 if (racerIndex >= racers.size()) {
-                    return;
+                    return null;
                 }
                 racers.get(racerIndex).addRaceTime(singleTrackRaceTime);
                 racerIndex++;
@@ -138,8 +152,6 @@ public class RaceOverViewForm {
         for (int i = 0; i < racersToSort.size(); i++) {
             sortedRacers[i] = racersToSort.get(i);
         }
-
-        averageTimesJList.setListData(sortedRacers);
-        averageTimesJList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+        return sortedRacers;
     }
 }
