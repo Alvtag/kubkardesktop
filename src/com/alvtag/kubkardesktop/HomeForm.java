@@ -74,12 +74,6 @@ public class HomeForm implements HomeFormInterface {
                 }
                 try {
                     raceOverViewForm.setRaceParams(
-                            lane0CheckBox.isSelected(),
-                            lane1CheckBox.isSelected(),
-                            lane2CheckBox.isSelected(),
-                            lane3CheckBox.isSelected(),
-                            lane4CheckBox.isSelected(),
-                            lane5CheckBox.isSelected(),
                             trackCount,
                             racersList
                     );

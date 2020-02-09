@@ -41,9 +41,7 @@ public class RaceOverViewForm {
         return rootPanel;
     }
 
-    public void setRaceParams(boolean isLane0Active, boolean isLane1Active, boolean isLane2Active,
-                              boolean isLane3Active, boolean isLane4Active, boolean isLane5Active,
-                              int trackCount, List<Racer> racerList) {
+    public void setRaceParams(int trackCount, List<Racer> racerList) {
         this.racerList = racerList;
         heatsArray = getHeatsArray(trackCount, racerList);
         heatsJList.setListData(heatsArray);
