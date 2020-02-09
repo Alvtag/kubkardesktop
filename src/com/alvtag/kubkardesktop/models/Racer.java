@@ -14,7 +14,6 @@ public class Racer implements Comparable<Racer> {
     private final String name;
     private final int racerId;
     private final List<Integer> raceResultList = new ArrayList<>();
-    ;
 
     public Racer(String name) {
         racersCounter++;

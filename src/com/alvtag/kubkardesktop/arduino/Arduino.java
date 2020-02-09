@@ -39,6 +39,7 @@ public class Arduino {
             try {
                 Thread.sleep(100);
             } catch (Exception e) {
+                e.printStackTrace();
             }
             return true;
         } else {
@@ -81,15 +82,14 @@ public class Arduino {
 
         byte[] data = new byte[128];
 
-        //TODO ALVTAG: seems like the parsing is problematic
-        //TODO processRxDataBuffer command from Arduino:RACE_END{"laneTime0":4419,"laneTime1":4881,+��Q����":5256,
-        // //"laneTime3":5541,"laneTime4":5830,"laneTime5":6270}
+        // SAMPLE bad processRxDataBuffer command from Arduino:
+        //   RACE_END{"laneTime0":4419,"laneTime1":4881,+��Q����":5256,
+        //   "laneTime3":5541,"laneTime4":5830,"laneTime5":6270}
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
             if (is.available() > 0) {
                 int bytesRead = is.read(data);
                 buffer.write(data, 0, bytesRead);
-//                System.in.skip(System.in.available());
                 System.in.skip(bytesRead);
             }
         } catch (IOException e) {
@@ -98,24 +98,7 @@ public class Arduino {
             }
         }
 
-        String result = new String(buffer.toByteArray());
-//        System.out.println("result:" + result);
-        return result;
-
-//
-//        Scanner in = new Scanner();
-//        try {
-//            System.out.println("in.hasNext():" + in.hasNext());
-//            while (in.hasNext()){
-//				out += in.next();
-//				System.out.println(out);
-//			}
-//            in.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println(e.getMessage());
-//        }
-//        return out;
+        return new String(buffer.toByteArray());
     }
 
     public void serialWrite(String s) {
