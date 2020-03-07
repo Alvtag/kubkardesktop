@@ -70,7 +70,7 @@ public class Printer implements Printable {
                 x1 += columnWidth;
             }
 
-            // 2 Per-heat racers List (all six lanes will be allocated printing spaced )
+            // 2 Per-heat racers List (all six lanes will be allocated printing space)
             int maxX = 0;
             int maxY = 0;
             y = INCH;
@@ -89,11 +89,15 @@ public class Printer implements Printable {
                         if (printRaceTimes) {
 
                             if (heat.getRaceTimesMS() != null) {
-                                int time = heat.getRaceTimesMS()[racerIndex];
-                                String s = String.format("%d.%d s", (time / 1000), (time % 1000));
-                                g.drawString(s, x2, y);
+                                int time = heat.getRaceTimesMSWithoutSkips()[racerIndex];
+                                if (time == -1) {
+                                    g.drawString("derp", x2, y);
+                                } else {
+                                    String s = String.format("%d.%ds", (time / 1000), (time % 1000));
+                                    g.drawString(s, x2, y);
+                                }
                             } else {
-                                g.drawString("-1", x2, y);
+                                //g.drawString("-1", x2, y);
                             }
                         } else {
                             g.drawString(String.valueOf(racer.getRacerId()), x2, y);
@@ -122,13 +126,13 @@ public class Printer implements Printable {
             // 3 fastest average times
             if (printRaceTimes) {
                 int x4 = INCH;
-                y = maxY+ SPACER;
+                y = maxY + SPACER;
 
                 Racer[] racers = RaceOverViewForm.getAverageTimeSortedRacersArray(heatsArray, racerList);
 
                 for (int i = 0; i < racers.length && i < 3; i++) {
                     StringBuilder stringBuilder = new StringBuilder("#");
-                    stringBuilder.append(i);
+                    stringBuilder.append(i+1);
                     stringBuilder.append(": ");
                     stringBuilder.append(racers[i].getName());
                     stringBuilder.append("(");

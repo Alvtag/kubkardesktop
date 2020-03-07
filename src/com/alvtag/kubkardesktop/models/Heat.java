@@ -32,6 +32,18 @@ public class Heat {
         return raceTimesMS;
     }
 
+    public int[] getRaceTimesMSWithoutSkips() {
+        int[] result = new int[racers.size()];
+        int j = 0;
+        for (int raceTime : raceTimesMS) {
+            if (raceTime != -1) {
+                result[j] = raceTime;
+                j++;
+            }
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Heat ");

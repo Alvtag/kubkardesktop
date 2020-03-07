@@ -173,7 +173,6 @@ public class HeatForm {
                     // invalid json detected; drop whatever else is in data buffer and wait for next status update.
                     arduinoRxDataBuffer = "";
                 }
-                //System.out.println("Status Read:" + status);
             } else if (jsonString.contains("END_RACE")) {
                 jsonString = jsonString.replace("END_RACE", "");
 
