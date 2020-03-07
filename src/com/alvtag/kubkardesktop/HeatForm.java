@@ -119,6 +119,7 @@ public class HeatForm {
     private JLabel lane0Race3NameJLabel;
     private JLabel lane4RacerNameJLabel;
     private JLabel lane5RacerNameJLabel;
+    private JButton refreshButton;
 
     private JLabel[] laneRacerIdJLabelList;
     private JLabel[] laneRacerNameJLabelList;
@@ -187,17 +188,20 @@ public class HeatForm {
 
                     int[] trackTimes = resultDTO.toArray(); // array size always 6
                     this.raceResult = new RaceResult(racerIds, trackTimes, heat.getHeatId());
-                    ;
                     setRaceResult(trackTimes);
                     setHeatStateIdle();
                 } else {
                     System.out.println("~Re-requesting end-race data~");
                     // Invalid json detected; drop buffer and re-request data.
-                    arduinoRxDataBuffer = "";
-                    arduino.serialWrite("$$RESEND_END_RACE%%");
+                    requestEndOfRaceData();
                 }
             }
         }
+    }
+
+    private void requestEndOfRaceData() {
+        arduinoRxDataBuffer = "";
+        arduino.serialWrite("$$RESEND_END_RACE%%");
     }
 
     private boolean isValidJson(String jsonString) {
@@ -331,6 +335,12 @@ public class HeatForm {
     }
 
     private void setButtonListeners(HomeFormInterface homeFormInterface) {
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                requestEndOfRaceData();
+            }
+        });
 
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -391,6 +401,7 @@ public class HeatForm {
         startRaceButton.setEnabled(raceResult == null);
         resetRaceButton.setEnabled(raceResult != null);
         submitButton.setEnabled(raceResult != null);
+        refreshButton.setEnabled(raceResult != null);
     }
 
     private void setHeatStateReady() {
@@ -402,6 +413,7 @@ public class HeatForm {
         startRaceButton.setEnabled(false);
         resetRaceButton.setEnabled(true);
         submitButton.setEnabled(false);
+        refreshButton.setEnabled(false);
     }
 
     private void setHeatStateRacing() {
@@ -413,6 +425,7 @@ public class HeatForm {
         startRaceButton.setEnabled(false);
         resetRaceButton.setEnabled(true);
         submitButton.setEnabled(false);
+        refreshButton.setEnabled(false);
     }
 
     public JPanel getRootPanel() {
