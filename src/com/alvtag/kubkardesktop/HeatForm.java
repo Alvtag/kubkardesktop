@@ -69,7 +69,7 @@ public class HeatForm {
     private static final int HERTZ_10_DELAY = 100;
     private static final String WINDOWS_ARDUINO_PORT = "COM3";
     private static final String MAC_ARDUINO_PORT = "/dev/cu.usbmodem1411";
-    private static final String ARDUINO_PORT = WINDOWS_ARDUINO_PORT;
+
 
     private JLabel heatTitleLabel;
 
@@ -293,12 +293,12 @@ public class HeatForm {
 
         setHeatStateIdle();
         setButtonListeners(homeFormInterface);
-        initiateArduino();
+        initiateArduino(WINDOWS_ARDUINO_PORT);
     }
 
-    private void initiateArduino() {
+    private void initiateArduino(String port) {
         if (arduino == null) {
-            arduino = new Arduino(ARDUINO_PORT, BAUD_RATE);
+            arduino = new Arduino(port, BAUD_RATE);
             boolean success = arduino.openConnection();
             try {
                 Thread.sleep(1000);
@@ -307,9 +307,14 @@ public class HeatForm {
             }
             System.out.println("Arduino connect success:" + success);
             if (!success) {
-                JOptionPane.showMessageDialog(rootPanel, "Arduino connection failed on " + ARDUINO_PORT + ". " +
-                        "Check:1) Serial Monitor locking port. 2)Arduino Connected. 3) PC platform. " +
-                        "Then restart the application.");
+                arduino = null;
+                if (port.equals(WINDOWS_ARDUINO_PORT)) {
+                    initiateArduino(MAC_ARDUINO_PORT);
+                } else if (port.equals(MAC_ARDUINO_PORT)) {
+                    JOptionPane.showMessageDialog(rootPanel, "Arduino connection failed on " + port + ". " +
+                            "Check:1) Serial Monitor locking port? 2)Arduino Connection? " +
+                            "Then restart the application.");
+                }
             } else {
                 // kick off two tasks; one to read the buffer for data arrived from arduino;
                 // one to request status updates from arduino
@@ -318,8 +323,6 @@ public class HeatForm {
                 //TODO: vary the speed of STATUS requests based on state
                 Timer timer = new Timer();
                 timer.schedule(arduinoCommRunnable, HERTZ_10_DELAY, HERTZ_10_DELAY);
-
-
             }
         }
     }

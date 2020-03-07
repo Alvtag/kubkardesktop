@@ -60,6 +60,6 @@ public class Racer implements Comparable<Racer> {
     public String toString() {
         //average time readout, in seconds
         int time = getAverageRaceTimeMs();
-        return String.format("%d | %s | %d.%d s", racerId, name, (time / 1000), (time % 1000));
+        return String.format("%d | %s | %d.%ds", racerId, name, (time / 1000), (time % 1000));
     }
 }

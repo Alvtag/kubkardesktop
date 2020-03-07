@@ -94,7 +94,11 @@ public class Arduino {
             }
         } catch (IOException e) {
             if (!e.getMessage().contains("Illegal seek")) {
-                e.printStackTrace();
+                if (e.getMessage().contains("This port appears to have been shutdown or disconnected")) {
+                    System.out.print(e.getMessage());
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
 
